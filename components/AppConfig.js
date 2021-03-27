@@ -1,10 +1,10 @@
 class AppConfig {
 
     //https://nordicapis.com/10-free-to-use-cors-proxies/
-    //CORSProxyURL_PROD = 'https://cors-anywhere.herokuapp.com/'
+    CORSProxyURL_PROD = 'https://cors-anywhere.herokuapp.com/'
     //CORSProxyURL_PROD = 'https://cors.bridged.cc/'
     //CORSProxyURL_PROD = 'https://cors-proxy.htmldriven.com/?url='
-    CORSProxyURL_PROD = 'https://thingproxy.freeboard.io/fetch/'
+    //CORSProxyURL_PROD = 'https://thingproxy.freeboard.io/fetch/'
     CORSProxyURL_DEV = 'http://localhost:8080/'
     /**
      * this is the url for downloading a shared google drive file
