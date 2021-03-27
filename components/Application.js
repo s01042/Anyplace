@@ -18,7 +18,7 @@ class Application extends HTMLElement {
 
     constructor () {
         super ()
-        this.myAppConfig = new AppConfig (true)
+        this.myAppConfig = new AppConfig (false)
         this.myServiceComponent = new ServiceComponent (this.myAppConfig)
     }
 
@@ -57,7 +57,7 @@ class Application extends HTMLElement {
                     })
             })
             .catch (e => {
-                console.log (`oops, something went wrong: '${e.message}`)
+                console.log (`oops, something went wrong: '${e.message}'`)
             })
     }
 
