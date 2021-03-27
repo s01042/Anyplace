@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 $(document).ready(function($){
 
 	let timelines = $('.cd-horizontal-timeline'),

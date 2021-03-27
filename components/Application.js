@@ -158,7 +158,7 @@ class Application extends HTMLElement {
             let head = document.head
             let script = document.createElement('script')
             script.type = 'text/javascript'
-            script.src = 'timeline.js'
+            script.src = './timeline/timeline.js'
             // onload will be called when the loading of the js file is completed
             // then the timeline will be locally available for further use so 
             // we bind to resolve the promise to this event
