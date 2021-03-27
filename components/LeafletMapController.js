@@ -19,7 +19,7 @@ template.innerHTML = `
           
     </style>
     <link rel="stylesheet" 
-        href="./../leaflet/leaflet.css"
+        href="../leaflet/leaflet.css"
         integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
         crossorigin=""
     />
@@ -131,7 +131,7 @@ export default class LeafletMapController extends HTMLElement {
             let head = document.head
             const script = document.createElement ('script')
             script.type = 'text/javascript'
-            script.src = "./../leaflet/leaflet.js"
+            script.src = "../leaflet/leaflet.js"
             script.integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
             script.crossOrigin = ""
             script.onload = resolve
