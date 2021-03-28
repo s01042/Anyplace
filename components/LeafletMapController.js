@@ -19,7 +19,7 @@ template.innerHTML = `
           
     </style>
     <link rel="stylesheet" 
-        href="leaflet/leaflet.css"
+        href="./leaflet/leaflet.css"
         integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
         crossorigin=""
     />
@@ -82,8 +82,8 @@ export default class LeafletMapController extends HTMLElement {
         this.map.panTo ([latitude, longitude])
         if (! this.mapMarker) {
             let myIcon = L.icon ({
-                iconUrl: '/leaflet/images/marker-icon-2x.png',
-                shadowUrl: '/leaflet/images/marker-shadow.png',
+                iconUrl: './leaflet/images/marker-icon-2x.png',
+                shadowUrl: './leaflet/images/marker-shadow.png',
                 iconSize: [25, 41],
                 iconAnchor: [10, 41], // point of the icon which will correspond to marker's location
                 shadowSize: [25, 41],
