@@ -16,7 +16,7 @@ To get the flow of events of this timeline component well integrated into my own
 
 # The flow of data
 
-The PWA follows the "offline first" approach. With it i can collect the GPS data of my actual position. If connectivity is available i will also collect weather data by consuming a web service. I then can enrich this collected data with a short message text. In the first place I store this data locally on my mobile device, a Huawei P20 pro smartphone. If I'am connected to the internet i then serialize this locally stored data into a JSON document and transfer it to my Google Drive account. 
+The PWA follows the "offline first" approach. With it i can collect the GPS data of my actual position. If connectivity is available i will also collect weather data by consuming a web service. I then can enrich this collected data with a short message text. In the first place I store this data locally on my mobile device, a Huawei P20 pro smartphone. If I'am connected to the internet the app then serialize this locally stored data into a JSON document and transfer it to my Google Drive account. 
 
 Here are some screen shots of the PWA:
 

@@ -10,9 +10,9 @@ const template = document.createElement ('template')
 template.innerHTML = `
     <style>
         .map-root {
-            height: 360px;
+            min-height: 500px;
             width: 100%;
-            max-width: 800px;
+            max-width: 768px;
             margin: 2em auto;
             border: 1px solid black
           }
@@ -115,10 +115,10 @@ export default class LeafletMapController extends HTMLElement {
         // TODO: call updateMap
         switch (name) {
             case 'latitude':
-                console.log (`new attribute value: ${newValue}`)
+                //console.log (`new attribute value: ${newValue}`)
                 break;
             case 'longitude':
-                console.log (`new attribute value: ${newValue}`)
+                //console.log (`new attribute value: ${newValue}`)
                 break;
         }
     }
