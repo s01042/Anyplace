@@ -17,6 +17,13 @@ body {
   background-color: #faf6f6;
 }
 
+h1 {
+  text-align: center;
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+  color: #6e6c6c;
+}
+
 .parent {
   display: flex;
   flex-wrap: wrap;
@@ -34,7 +41,8 @@ body {
   position: absolute;
   bottom: 1;
   left: 50%;
-  transform: translateX(-50%)
+  transform: translateX(-50%);
+  color: #6e6c6c;
 }
 
 a {
@@ -328,7 +336,7 @@ ul.no-bullets {
   font-size: 2.6rem;
   font-family: "Playfair Display", serif;
   font-weight: 700;
-  line-height: 1.2;
+  /*line-height: 1.2; */
 }
 .cd-horizontal-timeline .events-content em {
   display: block;
@@ -341,13 +349,14 @@ ul.no-bullets {
 .cd-horizontal-timeline .events-content p {
   font-size: 1.4rem;
   color: #959595;
+  text-align: justify;
 }
 .cd-horizontal-timeline .events-content em, .cd-horizontal-timeline .events-content p {
   line-height: 1.6;
 }
 @media only screen and (min-width: 768px) {
   .cd-horizontal-timeline .events-content h2 {
-    font-size: 4rem;
+    font-size: 3rem;
   }
   .cd-horizontal-timeline .events-content em {
     font-size: 2rem;

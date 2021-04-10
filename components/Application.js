@@ -213,15 +213,34 @@ class Application extends HTMLElement {
             newEventContentElement.setAttribute ('class', 'selected')
         }
         let h2 = document.createElement ('h2')
-        h2.innerText = fromDataEntry.City ? fromDataEntry.City.title + ` (range: ${Math.round(fromDataEntry.City.distance / 1000)} km)`: 'no city data available'
+        h2.innerText = fromDataEntry.City ? fromDataEntry.City.title + ` (ca. ${Math.round(fromDataEntry.City.distance / 1000)} km)`: 'no city data available'
         newEventContentElement.appendChild (h2)
         let em = document.createElement ('em')
-        em.innerText = timelineItemDate
+        //em.innerHTML = `${timelineItemDate} &nbsp; ${this.getTimeStringFromTimestamp (fromDataEntry.Location.timestamp)}` 
+        em.innerHTML = fromDataEntry.WeatherData ? `
+                            ${this.getTimeStringFromTimestamp (fromDataEntry.Location.timestamp)} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+                            <img 
+                                src="https://www.metaweather.com/static/img/weather/${fromDataEntry.WeatherData.weather_state_abbr}.svg" 
+                                alt="${fromDataEntry.WeatherData.weather_state_name}" 
+                                width="32" 
+                                height="32"
+                                title=${fromDataEntry.WeatherData.weather_state_name}
+                            >
+                            &nbsp; ${Math.round (fromDataEntry.WeatherData.the_temp)} &#8451;
+                        ` : `
+                            ${this.getTimeStringFromTimestamp (fromDataEntry.Location.timestamp)} &nbsp; 
+                        `
         newEventContentElement.appendChild (em)
         let p = document.createElement ('p')
         p.innerText = fromDataEntry.SMS === undefined ? 'no short message text available' : fromDataEntry.SMS
         newEventContentElement.appendChild (p)
         eventContentList.appendChild (newEventContentElement)
+    }
+
+    getTimeStringFromTimestamp (theTimestampValue) {
+        let lang = navigator.language
+        let timeString = new Date (theTimestampValue).toLocaleTimeString (lang, {hour: '2-digit', minute: '2-digit'})
+        return timeString
     }
 
     /**
