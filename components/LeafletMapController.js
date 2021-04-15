@@ -11,7 +11,7 @@ template.innerHTML = `
     <style>
         .map-root {
             min-height: 500px;
-            width: 100%;
+            width: 90%;
             max-width: 768px;
             margin: 2em auto;
             border: 1px solid black
