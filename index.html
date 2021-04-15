@@ -7,18 +7,24 @@
         <meta name="theme-color" content="#93908D">
         <title>Anyplace</title>
 
-        <link rel='stylesheet' type="text/css" href="styles.css" >
         <!-- jquery will be used by timeline.js -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <!-- adding shoelace web components -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.37/dist/themes/base.css">
         <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.37/dist/shoelace.js"></script>
+
+        <link rel='stylesheet' type="text/css" href="styles.css" >
     </head>
     <body>
         <!-- 
             the main entry point is my application web component class (see connectedCallback() there)
         -->
         <application-class></application-class>
+        <!-- 
+            a placeholder for shoelace alert
+        -->
+        <div class="alert-toast-wrapper"></div>
+
         <div class="wrapper">
             <header class="page-header">Follow my tracks</header>
             <div class="parent">

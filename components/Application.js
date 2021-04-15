@@ -28,6 +28,8 @@ class Application extends HTMLElement {
      * and will be called when the component is inserted into the DOM of the hosting page
      */
     connectedCallback () {
+        let fetchMessage = this.createAlert ("trying to fetch data from the web ...", "info", "info-circle", 20000)
+        fetchMessage.toast ()
         this.myServiceComponent.fetchDataFromGoogleDrive ()
             .then (remoteData => {
                 this.arrayOfEntries = remoteData
@@ -55,11 +57,51 @@ class Application extends HTMLElement {
                     .then ( () => {
                         this.selectMostRecentEntryAsDefault ()
                     })
+                fetchMessage.hide ()
             })
             .catch (e => {
+                fetchMessage.hide ()
+                let errorMessage = this.createAlert ("oops ... something went wrong! Probably CORS server not responding.", "danger", "info-circle", 10000)
+                errorMessage.toast ()
                 console.log (`oops, something went wrong: '${e.message}'`)
             })
     }
+
+    /**
+     * create a shoelace alert component, init it and return it
+     * 
+     * @param {*} message 
+     * @param {*} type 
+     * @param {*} icon 
+     * @param {*} duration 
+     * @returns 
+     */
+    createAlert (message, type = 'primary', icon = 'info-circle', duration = 3000) {
+        const alert = Object.assign(document.createElement('sl-alert'), {
+            type: type,
+            closable: true,
+            duration: duration,
+            innerHTML: `
+              <sl-icon name="${icon}" slot="icon"></sl-icon>
+              ${this.escapeHtml(message)}
+            `
+        });
+      
+        document.body.append(alert);
+        return alert
+    }
+
+    /**
+     * Always escape HTML for text arguments!
+     * 
+     * @param {*} html 
+     * @returns 
+     */
+    escapeHtml(html) {
+        const div = document.createElement('div');
+        div.textContent = html;
+        return div.innerHTML;
+      }  
 
     /**
      * let's select the last timeline entry as the default one because 
