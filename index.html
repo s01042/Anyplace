@@ -10,59 +10,62 @@
         <link rel='stylesheet' type="text/css" href="styles.css" >
         <!-- jquery will be used by timeline.js -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <!-- adding shoelace web components -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.37/dist/themes/base.css">
+        <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.37/dist/shoelace.js"></script>
     </head>
     <body>
         <!-- 
             the main entry point is my application web component class (see connectedCallback() there)
         -->
         <application-class></application-class>
-        <div class="parent">
-            <div class="box">
-                <h1>Follow my tracks</h1>
-                <!-- 
-                    this is the DOM placeholder for the timeline
-                -->
-                <section class="cd-horizontal-timeline">
-                    <div class="timeline">
-                        <div class="events-wrapper">
-                            <div class="events">
-                                <ul class="no-bullets">
-                                    <!-- 
-                                        this is the placeholder for the timeline event elements
-                                        which will be inserted at runtime
-                                        see Application -> createTimelineItem
-                                    -->                            
-                                </ul>
-                
-                                <span class="filling-line" aria-hidden="true"></span>
-                            </div> <!-- .events -->
-                        </div> <!-- .events-wrapper -->
-                            
-                        <ul class="cd-timeline-navigation">
-                            <li><a href="#0" class="prev inactive">Prev</a></li>
-                            <li><a href="#0" class="next">Next</a></li>
-                        </ul> <!-- .cd-timeline-navigation -->
-                    </div> <!-- .timeline -->
-                
-                    <div class="events-content">
-                        <ul class="no-bullets">
-                            <!--
-                                this is the placeholder for the events-content elements
-                                which will be inserted at runtime
-                                see Application -> createTimelineItem
-                            -->
-                            
-                        </ul>
-                    </div> <!-- .events-content -->
-                </section> <!-- end placerholder for timeline -->
+        <div class="wrapper">
+            <header class="page-header">Follow my tracks</header>
+            <div class="parent">
+                <div class="box">
+                    <!-- 
+                        this is the DOM placeholder for the timeline
+                    -->
+                    <section class="cd-horizontal-timeline">
+                        <div class="timeline">
+                            <div class="events-wrapper">
+                                <div class="events">
+                                    <ul class="no-bullets">
+                                        <!-- 
+                                            this is the placeholder for the timeline event elements
+                                            which will be inserted at runtime
+                                            see Application -> createTimelineItem
+                                        -->                            
+                                    </ul>
+                    
+                                    <span class="filling-line" aria-hidden="true"></span>
+                                </div> <!-- .events -->
+                            </div> <!-- .events-wrapper -->
+                                
+                            <ul class="cd-timeline-navigation">
+                                <li><a href="#0" class="prev inactive">Prev</a></li>
+                                <li><a href="#0" class="next">Next</a></li>
+                            </ul> <!-- .cd-timeline-navigation -->
+                        </div> <!-- .timeline -->
+                    
+                        <div class="events-content">
+                            <ul class="no-bullets">
+                                <!--
+                                    this is the placeholder for the events-content elements
+                                    which will be inserted at runtime
+                                    see Application -> createTimelineItem
+                                -->
+                                
+                            </ul>
+                        </div> <!-- .events-content -->
+                    </section> <!-- end placerholder for timeline -->
+                </div>
+                <div class="box">
+                    <!-- init the leaflet map controller with default lat/long data -->
+                    <leaflet-map-controller latitude='52.4137053' longitude='13.091715'></leaflet-map-controller>
+                </div>    
             </div>
-            <div class="box">
-                <!-- init the leaflet map controller with default lat/long data -->
-                <leaflet-map-controller latitude='52.4137053' longitude='13.091715'></leaflet-map-controller>
-            </div>    
-        </div>
-        <div class="footer">
-            <p>(2021) Finger&uumlbung by <a href="https://github.com/s01042/Anyplace">s01042</a></p>
+            <footer class="page-footer">(2021) Finger&uumlbung by <a href="https://github.com/s01042/Anyplace">s01042</a></footer>
         </div>
 
         <!--

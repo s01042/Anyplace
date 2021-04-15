@@ -41,3 +41,7 @@ Fix the CORS problem!
 I'am still trapped by the CORS problem. I'm hosting Anyplace on GitHub pages where you can only deploy static web sites. There are no server side technologies available on GitHub pages on which I could have build my own CORS Proxy or some kind of web service proxy.
 
 So GitHub pages is the origin of my web app. The JavaScript code of my app is running locally on the client device and in the client browser. That leads to the fact, that fetching the data from my Google Drive is a cross origin call always controlled by CORS. 
+
+# Try it
+
+Use [this link](https://s01042.github.io/Anyplace/) to try the app.
