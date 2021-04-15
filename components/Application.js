@@ -20,6 +20,16 @@ class Application extends HTMLElement {
         super ()
         this.myAppConfig = new AppConfig (false)
         this.myServiceComponent = new ServiceComponent (this.myAppConfig)
+        this.wireupTheDrawer ()
+    }
+
+    wireupTheDrawer () {
+        const drawer = document.querySelector('.drawer-placement-top');
+        const openButton = document.getElementById ('openDrawer');
+        const closeButton = drawer.querySelector('sl-button[type="info"]');
+
+        openButton.addEventListener('click', () => drawer.show());
+        closeButton.addEventListener('click', () => drawer.hide());
     }
 
     /**
@@ -28,7 +38,7 @@ class Application extends HTMLElement {
      * and will be called when the component is inserted into the DOM of the hosting page
      */
     connectedCallback () {
-        let fetchMessage = this.createAlert ("trying to fetch data from the web ...", "info", "info-circle", 20000)
+        let fetchMessage = this.createAlert ("trying to fetch data from the web ...", "info", "info-circle", 10000)
         fetchMessage.toast ()
         this.myServiceComponent.fetchDataFromGoogleDrive ()
             .then (remoteData => {
