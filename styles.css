@@ -6,6 +6,23 @@
   box-sizing: border-box;
 }
 
+/* resizing shoelace components  */
+sl-button::part(label) {
+  font-size: 1.3rem;
+}
+
+sl-alert::part(base) {
+  font-size: 1.3rem;
+}
+
+sl-alert::part(icon) {
+  font-size: 2rem;
+}
+
+sl-alert::part(close-button) {
+  font-size: 2rem;
+}
+
 html {
   font-size: 62.5%;
   height: 100%;

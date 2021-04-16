@@ -24,7 +24,7 @@ class Application extends HTMLElement {
     }
 
     wireupTheDrawer () {
-        const drawer = document.querySelector('.drawer-placement-top');
+        const drawer = document.getElementById('drawer');
         const openButton = document.getElementById ('openDrawer');
         const closeButton = drawer.querySelector('sl-button[type="info"]');
 
@@ -38,7 +38,7 @@ class Application extends HTMLElement {
      * and will be called when the component is inserted into the DOM of the hosting page
      */
     connectedCallback () {
-        let fetchMessage = this.createAlert ("trying to fetch data from the web ...", "info", "info-circle", 10000)
+        let fetchMessage = this.createAlert ("trying to fetch data ...", "info", "info-circle", 10000)
         fetchMessage.toast ()
         this.myServiceComponent.fetchDataFromGoogleDrive ()
             .then (remoteData => {
@@ -70,7 +70,7 @@ class Application extends HTMLElement {
                 fetchMessage.hide ()
             })
             .catch (e => {
-                fetchMessage.hide ()
+                //fetchMessage.hide ()
                 let errorMessage = this.createAlert ("oops ... something went wrong! Probably CORS server not responding.", "danger", "info-circle", 10000)
                 errorMessage.toast ()
                 console.log (`oops, something went wrong: '${e.message}'`)
