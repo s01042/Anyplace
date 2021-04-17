@@ -18,11 +18,43 @@ class Application extends HTMLElement {
 
     constructor () {
         super ()
-        this.myAppConfig = new AppConfig (false)
+        this.myAppConfig = new AppConfig (true)
         this.myServiceComponent = new ServiceComponent (this.myAppConfig)
+        this.registerServiceWorker ()
         this.wireupTheDrawer ()
     }
 
+    /**
+     * register serviceWorker
+     * the serviceWorker location is important because it defines its scope
+     * Whats listed in start_url of the manifest must always be servable by the service worker, even when offline.
+     * another important point: a ServiceWorker location has to be https hosted
+     * location 'localhost' will work as well
+     */
+    async registerServiceWorker () {
+        if ('serviceWorker' in navigator) {
+            try {
+                /**
+                 * the max scope of a serviceWorker is the location of the worker!
+                 * personal github pages are all hosted under one root domain (`https://[username].github.io/`).  
+                 * this may cause some stumbling when registering serviceWorkers
+                 * IMPORTANT: check that serviceWorker scope is matching with the scope in the manifest
+                 */
+                let reg = await navigator.serviceWorker.register ('./anyplace-service-worker.js', {scope: './'})
+                // notify (`ServiceWorker registered. Scope is '${reg.scope}'!`, 'info', 'info-circle', 5000)
+            } catch (exception) {
+                let alert = this.createAlert (`ServiceWorker registration failed: ${exception}`, 'warning', 'exclamation-triangle', 10000)
+                alert.toast ()
+            }
+        } else {
+            let alert = this.createAlert (`your browser does not support ServiceWorker.`)
+            alert.toast ()
+        }
+    }
+
+    /**
+     * wires up the shoelace drawer component 
+     */
     wireupTheDrawer () {
         const drawer = document.getElementById('drawer');
         const openButton = document.getElementById ('openDrawer');
@@ -73,7 +105,7 @@ class Application extends HTMLElement {
                 //fetchMessage.hide ()
                 let errorMessage = this.createAlert ("oops ... something went wrong! Probably CORS server not responding.", "danger", "info-circle", 10000)
                 errorMessage.toast ()
-                console.log (`oops, something went wrong: '${e.message}'`)
+                //console.log (`oops, something went wrong: '${e.message}'`)
             })
     }
 
@@ -179,8 +211,9 @@ class Application extends HTMLElement {
              */
             let selectedElement = eventContentList.querySelector ('.selected')
             let dataItem = this.getDataItem (selectedElement.attributes['itemID'].value)
-            let prevDataItem = this.getPrevDataItem (selectedElement.attributes['itemID'].value)
-            if (prevDataItem) console.dir (prevDataItem[1].Location)
+            /* here i could calculate the distance between the current position and the last one */
+            //let prevDataItem = this.getPrevDataItem (selectedElement.attributes['itemID'].value)
+
             let coords = dataItem[1].Location.coords
             document.querySelector ('leaflet-map-controller').updateMap (coords.latitude, coords.longitude)
         })

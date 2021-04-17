@@ -1,6 +1,9 @@
 /**
  * i will encapsulate the necessary leaflet map functionality in a
  * web component to clean up my source code a bit 
+ * 
+ * leaflet.js has some caching mechanisms in itself when it comes to fetching map tiles
+ * i became aware of this as i implemented the PWA service worker 
  */
 const template = document.createElement ('template')
 /**
@@ -95,7 +98,7 @@ export default class LeafletMapController extends HTMLElement {
         }   
         // bind a popup to the mapMarker
         let distance = this.distanceInKmBetweenEarthCoordinates (this.DEFAULT_LAT, this.DEFAULT_LONG, latitude, longitude)
-        this.mapMarker.bindPopup (`<b>'as-the-crows-flies'</b><br><br>Entfernung Luftlinie von Daheim: ca. ${distance} km`)
+        this.mapMarker.bindPopup (`<b>'as the crows flies'</b><br><br>Entfernung Luftlinie von Daheim: ca. ${distance} km`)
     }
 
     /**

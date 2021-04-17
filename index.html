@@ -7,8 +7,19 @@
         <meta name="theme-color" content="#93908D">
         <title>Anyplace</title>
 
-        <!-- jquery will be used by timeline.js -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <!-- 
+            jquery will be used by timeline.js 
+            ver. 2.x has some minor security flaws
+        -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> 
+        <!-- 
+            but with jquery version 3.x timeline.js does not work out of the box
+            <script
+                src="https://code.jquery.com/jquery-3.6.0.min.js"
+                integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+                crossorigin="anonymous">
+            </script>
+        -->
  
         <link rel='stylesheet' type="text/css" href="styles.css" >
 
@@ -16,7 +27,17 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.37/dist/themes/base.css">
         <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.37/dist/shoelace.js"></script>
 
- 
+        <link rel="apple-touch-icon" href="./images/anyplace192.png">
+
+        <!--
+            link to app manifest (should it be "/manifest.webmanifest" for clearificaton?)
+        -->
+        <link rel="manifest" href="manifest.webmanifest">
+        <!-- 
+            and then there is this strange favicon.ico fetch
+            so i will provide one here
+        -->
+        <link rel="shortcut icon" href="./images/anyplace64.ico" />
     </head>
     <body>
         <!-- 
@@ -43,10 +64,11 @@
                 <div class="block">
                     <h2>Einige Hinweise:</h2>
                     <p>Die Zeitleisten- und Kartenkomponente sind touch-aware. Wenn dein Gerät über einen Touchscreen verfügt, kannst du diese Komponenten darüber bedienen.</p>
-                    <p>Die Anordung der GUI-Komponenten ist responsive und passt sich dynamisch auf die Bildschirmgröße an.</p>
-                    <p>Ich habe das aktuelle Layout auf einem iPad, verschiedenen Mobilfunktelefonen und auch Notebooks testen können.</p>
+                    <p>Die Anordung der GUI-Elemente ist responsive und passt sich dynamisch der Bildschirmgröße an.</p>
+                    <p>Das aktuelle Layout ist auf einem iPad Air, zwei verschiedenen Mobilfunktelefonen und zwei Notebooks getestet worden. Der grundsätzliche Entwurf folgt dem 'mobile first' Ansatz.</p>
                     <p>Durch die Zeitleiste kann man auch mit der linke und rechten Cursortaste navigieren.</p>
                     <p>In der Kartenansicht kann man durch Swipen navigieren und mit den üblichen Gesten zoomen.</p>
+                    <p>Die Kartenmarkierung ist anklickbar und zeigt die ungefähre Luftlinienentfernung zwischen dem markierten Standort und meiner 'home base'.</p>
                 </div>
                 <sl-button slot="footer" type="info">Close</sl-button>
             </sl-drawer>            

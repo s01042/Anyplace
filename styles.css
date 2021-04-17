@@ -27,6 +27,11 @@ sl-drawer::part(close-button) {
   font-size: 2rem; 
 }
 
+/*  make the drawer a little bit wider */
+sl-drawer#drawer {
+  --size: 40rem; 
+}
+
 .block {
   text-align: justify;
   padding-left: 5%;

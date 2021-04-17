@@ -1,0 +1,39 @@
+{
+    "name": "Anyplace App",
+    "short_name": "Anyplace",
+    "start_url": "./", 
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#f8f8f8",
+    "theme_color": "#93908D",
+    "description": "Follow my tracks",
+    "scope": "./",
+    "icons": [
+        {
+            "src": "./images/anyplace512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "./images/anyplace64.png",
+            "sizes": "64x64",
+            "type": "image/png"
+        },
+        {
+            "src": "./images/anyplace256.png",
+            "sizes": "256x256",
+            "type": "image/png"
+        },
+        {
+            "src": "./images/anyplace192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+
+    ],
+    "developer": {
+        "name": "s01042",
+        "url": "https://github.com/s01042"
+    }        
+}
