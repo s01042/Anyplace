@@ -29,7 +29,7 @@ sl-drawer::part(close-button) {
 
 /*  make the drawer a little bit wider */
 sl-drawer#drawer {
-  --size: 40rem; 
+  --size: 30rem; 
 }
 
 .block {
