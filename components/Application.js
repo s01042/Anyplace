@@ -18,7 +18,7 @@ class Application extends HTMLElement {
 
     constructor () {
         super ()
-        this.myAppConfig = new AppConfig (true)
+        this.myAppConfig = new AppConfig (false)
         this.myServiceComponent = new ServiceComponent (this.myAppConfig)
         this.wireupTheDrawer ()
     }
