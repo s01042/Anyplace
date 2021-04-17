@@ -18,7 +18,7 @@ class Application extends HTMLElement {
 
     constructor () {
         super ()
-        this.myAppConfig = new AppConfig (false)
+        this.myAppConfig = new AppConfig (true)
         this.myServiceComponent = new ServiceComponent (this.myAppConfig)
         this.wireupTheDrawer ()
     }
@@ -179,23 +179,46 @@ class Application extends HTMLElement {
              */
             let selectedElement = eventContentList.querySelector ('.selected')
             let dataItem = this.getDataItem (selectedElement.attributes['itemID'].value)
+            let prevDataItem = this.getPrevDataItem (selectedElement.attributes['itemID'].value)
+            if (prevDataItem) console.dir (prevDataItem[1].Location)
             let coords = dataItem[1].Location.coords
             document.querySelector ('leaflet-map-controller').updateMap (coords.latitude, coords.longitude)
         })
         this.observer.observe (target, config)
     }
 
-
+    /**
+     * get the dataItem by ID
+     * 
+     * @param {*} itemID 
+     * @returns 
+     */
     getDataItem (itemID) {
         /**
-         * breaking from forEach with return is not possible?!
-         * that's why i'm using a classic for-loop
+         * breaking from forEach with return is not possible
+         * i use a classic for loop instead
          */
         for (let index = 0; index < this.arrayOfEntries.length; index ++) {
             if (this.arrayOfEntries[index][0] === itemID) {
                 return this.arrayOfEntries[index]
             }
+        }
+    }
 
+    /**
+     * get the previous dataItem if one exist
+     * @param {*} itemID 
+     * @returns 
+     */
+    getPrevDataItem (itemID) {
+        for (let index = 0; index < this.arrayOfEntries.length; index ++) {
+            if (this.arrayOfEntries[index][0] === itemID) {
+                if (index > 0) {
+                    return this.arrayOfEntries[index - 1]
+                } else {
+                    return null
+                }
+            }
         }
     }
 

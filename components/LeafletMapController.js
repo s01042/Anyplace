@@ -85,14 +85,53 @@ export default class LeafletMapController extends HTMLElement {
                 iconUrl: './leaflet/images/marker-icon-2x.png',
                 shadowUrl: './leaflet/images/marker-shadow.png',
                 iconSize: [25, 41],
-                iconAnchor: [10, 41], // point of the icon which will correspond to marker's location
+                //iconAnchor: [10, 41], // point of the icon which will correspond to marker's location
                 shadowSize: [25, 41],
-                shadowAnchor: [4, 41]
+                shadowAnchor: [7, 17]
             })
             this.mapMarker = L.marker([latitude, longitude], {icon: myIcon}).addTo(this.map)
         } else {
             this.mapMarker.setLatLng ([latitude, longitude])
         }   
+        // bind a popup to the mapMarker
+        let distance = this.distanceInKmBetweenEarthCoordinates (this.DEFAULT_LAT, this.DEFAULT_LONG, latitude, longitude)
+        this.mapMarker.bindPopup (`<b>'as-the-crows-flies'</b><br><br>Entfernung Luftlinie von Daheim: ca. ${distance} km`)
+    }
+
+    /**
+     * i want to calculate the distance from home and need 
+     * to convert degrees to radiants
+     * @param {*} degrees 
+     * @returns 
+     */
+    degreesToRadians(degrees) {
+        return degrees * Math.PI / 180;
+    }
+
+    /**
+     * This uses the ‘haversine’ formula to calculate the great-circle distance between two points – 
+     * that is, the shortest distance over the earth’s surface – giving an ‘as-the-crow-flies’ distance 
+     * between the points (ignoring any hills they fly over, of course!)
+     * 
+     * @param {*} lat1 
+     * @param {*} lon1 
+     * @param {*} lat2 
+     * @param {*} lon2 
+     * @returns 
+     */
+    distanceInKmBetweenEarthCoordinates(lat1, lon1, lat2, lon2) {
+        const earthRadiusKm = 6371
+      
+        let dLat = this.degreesToRadians (lat2-lat1)
+        let dLon = this.degreesToRadians (lon2-lon1)
+      
+        lat1 = this.degreesToRadians (lat1)
+        lat2 = this.degreesToRadians (lat2)
+      
+        let a = Math.sin (dLat/2) * Math.sin (dLat/2) +
+                Math.sin (dLon/2) * Math.sin (dLon/2) * Math.cos (lat1) * Math.cos (lat2)
+        let c = 2 * Math.atan2 (Math.sqrt (a), Math.sqrt (1-a))
+        return Math.round (earthRadiusKm * c)
     }
 
     /**

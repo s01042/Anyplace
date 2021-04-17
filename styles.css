@@ -23,6 +23,15 @@ sl-alert::part(close-button) {
   font-size: 2rem;
 }
 
+sl-drawer::part(close-button) {
+  font-size: 2rem; 
+}
+
+.block {
+  text-align: justify;
+  padding-left: 5%;
+}
+
 html {
   font-size: 62.5%;
   height: 100%;
