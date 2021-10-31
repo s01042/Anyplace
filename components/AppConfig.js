@@ -9,9 +9,13 @@ class AppConfig {
     /**
      * this is the url for downloading a shared google drive file
      * TODO: look at this: https://developers.google.com/drive/api/v3/manage-downloads
+     * 
+     * I'm now hosting my own service proxy on heroku
+     * documentEndPoint = 'https://drive.google.com/uc?export=download&id=1hvpoA2NNjfe8PELZNxWR7mJnNMQ4Sn49'
      */
-    documentEndPoint = 'https://drive.google.com/uc?export=download&id=1hvpoA2NNjfe8PELZNxWR7mJnNMQ4Sn49'
+    documentEndPoint = 'https://infinite-castle-19858.herokuapp.com/api/getGoogleDoc?docID=1hvpoA2NNjfe8PELZNxWR7mJnNMQ4Sn49'
     isRunningInDevEnvironment
+
 
     /**
      * default for isRunningInDevEnvironment is FALSE

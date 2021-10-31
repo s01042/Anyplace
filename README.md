@@ -42,6 +42,22 @@ I'am still trapped by the CORS problem. I'm hosting Anyplace on GitHub pages whe
 
 So GitHub pages is the origin of my web app. The JavaScript code of my app is running locally on the client device and in the client browser. That leads to the fact, that fetching the data from my Google Drive is a cross origin call always controlled by CORS. 
 
+# Resumption
+
+Another CORS proxy server was abused and is down now. So i implemented my own service proxy and host it on heroku. With this came new ideas: periodic background syncing and notifications came to my mind. 
+
+# About periodic background sync
+
+Periodic background sync is an extension of the background sync API. the goal is to regular force synchronisation events and update the locally (offline) stored data with fresh online data. the background sync API does not show any information in the apps gui. instead it delegates all the duty to the service worker.
+
+The service worker can fetch new data at a regular intervall and compares this new data with the locally stored one. The service worker can than use notifications to inform the user about new data arrivals. 
+
+In chromium browsers the permission for 'periodic-bakground-sync' is only granted, if the website is locally installed as an pwa. Since Chrome regards the installation of the application as implicit consent, there will be no permission request shown to the end user. 
+
+Then the decision as to whether and how often a website can use the interface depends on its site engagement score. This is between 0 and 100 points, is influenced by the use of the website and can be viewed under chrome: // site-engagement.
+
+The higher the score, the more often the events can be triggered, in the best case once a day.
+
 # Try it
 
 Use [this link](https://s01042.github.io/Anyplace/) to try the app.

@@ -12,7 +12,11 @@ class ServiceComponent {
         const promise = new Promise (function (resolve, reject) {
             // try to fetch the data from google drive
             try {
-                fetch (self.myAppConfig.CORSProxyURL + self.myAppConfig.DocumentEndPoint)
+                /**
+                 * i'm now hosting my own service proxy on heroku
+                 * fetch (self.myAppConfig.CORSProxyURL + self.myAppConfig.DocumentEndPoint)
+                 */
+                fetch (self.myAppConfig.DocumentEndPoint)
                 .then( response => {
                     if( response.ok ) {
                         // we await json data 

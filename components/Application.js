@@ -22,6 +22,7 @@ class Application extends HTMLElement {
         this.myServiceComponent = new ServiceComponent (this.myAppConfig)
         this.registerServiceWorker ()
         this.wireupTheDrawer ()
+        this.wireupAboutDialog ()
     }
 
     /**
@@ -41,6 +42,34 @@ class Application extends HTMLElement {
                  * IMPORTANT: check that serviceWorker scope is matching with the scope in the manifest
                  */
                 let reg = await navigator.serviceWorker.register ('./anyplace-service-worker.js', {scope: './'})
+                //TODO  i want to force a sw update in dev env. 
+                //      comment this in in production
+                await reg.update ()
+
+                //TODO  we need notification permissions   
+
+                let syncPermission = await navigator.permissions.query ({name: 'periodic-background-sync'})
+                if (syncPermission.state === 'granted') {
+                    //  check if ready is supported
+                    if (navigator.serviceWorker.ready) {
+                        navigator.serviceWorker.ready.then ( async registry => {
+                            if ('PeriodicSyncManager' in window) {
+                                try {
+                                  await registry.periodicSync.register('ANYPLACE_BACKGROUND_SYNC', {
+                                    minInterval: 1 * 60 * 60 * 1000
+                                  });
+                                } catch (error) {
+                                  console.log ('Bakground sync not available')
+                                }
+                            }
+                        })
+                    }
+                } else {
+                    let alert = this.createAlert ('Background sync is disabled.', 'warning', 'exclamation-triangle', 3000)
+                    alert.toast ()
+                }
+
+
                 // notify (`ServiceWorker registered. Scope is '${reg.scope}'!`, 'info', 'info-circle', 5000)
             } catch (exception) {
                 let alert = this.createAlert (`ServiceWorker registration failed: ${exception}`, 'warning', 'exclamation-triangle', 10000)
@@ -62,6 +91,28 @@ class Application extends HTMLElement {
 
         openButton.addEventListener('click', () => drawer.show());
         closeButton.addEventListener('click', () => drawer.hide());
+    }
+
+    /**
+     * wire up the about dialog
+     */
+    wireupAboutDialog () {
+        const showAboutButton = document.getElementById ('showAbout')
+        showAboutButton.addEventListener ('click', () =>{
+            let aboutDialog = this.createAboutDialog ()
+            //  if dialog is closed by escape key or by clicking in the overlay
+            //  remove from it from the dom. this event will also be triggered
+            //  if aboutDialog.hide () is called
+            aboutDialog.addEventListener ('sl-after-hide', () => {
+                document.body.removeChild (aboutDialog)
+            })
+            let okayButton = aboutDialog.querySelector ("sl-button[type='primary']")
+            okayButton.addEventListener ('click', () => {
+                aboutDialog.hide ()
+                //  this will trigger the sl-after-hide event
+            })
+            aboutDialog.show ()    
+        })
     }
 
     /**
@@ -127,10 +178,35 @@ class Application extends HTMLElement {
               <sl-icon name="${icon}" slot="icon"></sl-icon>
               ${this.escapeHtml(message)}
             `
-        });
+        })
       
         document.body.append(alert);
         return alert
+    }
+
+    /**
+     * create an instance of aboutDialog and return it
+     * @returns 
+     */
+    createAboutDialog () {
+        const dialog = Object.assign (document.createElement ('sl-dialog'), {
+            label: 'About this app',
+            innerHTML: `
+                <sl-button slot="footer" type="primary">Okay</sl-button>
+                <sl-avatar
+                    image="./../images/anyplace.png"
+                    alt="anyplace logo"
+                ></sl-avatar>
+                <strong>&nbspAnyplace</strong><br><br>
+                Folge mir mit dieser App auf meiner Radreise durch Europa.<br><br>
+                Ich werde in regeläßigen Abständen meine Orts-, Wetter- und Zustandsdaten aktualisieren. So kannst du wissen, wo ich bin und wie es mir geht. &#128692;
+                <br><br><br>
+                <small><center>made by s01042</center></small>
+            `
+        })
+        dialog.style = "--width: 50vw;"
+        document.body.append (dialog)
+        return dialog
     }
 
     /**

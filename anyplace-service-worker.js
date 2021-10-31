@@ -54,6 +54,7 @@ const cacheName = 'Anyplace-V1'
 self.addEventListener ('install', async (e) => {
     const cache = await caches.open (cacheName)
     await cache.addAll (staticAssets)
+
     /**
      * For a page with no previous service worker files, 
      * the newly installed service worker becomes activated immediately.
@@ -66,12 +67,31 @@ self.addEventListener ('install', async (e) => {
     return self.skipWaiting ()
 })
 
+self.addEventListener ('ready', (registration) => {
+    if (registration.periodicSync) {
+        console.log ('periodic sync is supported')
+    } else {
+        console.log ('periodic sync is not suppoerted')
+    }
+})
+
+self.addEventListener ('sync', (event) => {
+    if (event.tag === 'ANYPLACE_BACKGROUND_SYNC') {
+        event.waitUntil (doBackgroundSync())
+    }
+})
+
+function doBackgroundSync () {
+    console.log ('background sync triggered')
+    
+}
+
 /**
  * When a serviceWorker is initially registered, 
  * pages won't use it until they next load. 
  * The claim() method causes those pages to be controlled immediately.
  */
- self.addEventListener('activate', (e) =>{
+self.addEventListener('activate', (e) =>{
     self.clients.claim()
 })
 
@@ -98,6 +118,8 @@ self.addEventListener ('install', async (e) => {
         event.respondWith (staleWhileRevalidate (event.request))
     }
 })
+
+
 
 /**
  * for the map api calls i will establish a network only strategy
