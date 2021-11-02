@@ -16,6 +16,8 @@ class Application extends HTMLElement {
     theMap = null
     theMapMarker = null
 
+    deferredInstallationPrompt = null
+
     constructor () {
         super ()
         this.myAppConfig = new AppConfig (false)
@@ -65,8 +67,9 @@ class Application extends HTMLElement {
                         })
                     }
                 } else {
-                    let alert = this.createAlert ('Background sync is disabled.', 'warning', 'exclamation-triangle', 3000)
-                    alert.toast ()
+                    //let alert = this.createAlert ('Background sync is disabled.', 'warning', 'exclamation-triangle', 3000)
+                    //alert.toast ()
+                    console.log ('background sync is not available')
                 }
 
 
@@ -121,7 +124,7 @@ class Application extends HTMLElement {
      * and will be called when the component is inserted into the DOM of the hosting page
      */
     connectedCallback () {
-        let fetchMessage = this.createAlert ("trying to fetch data ...", "info", "info-circle", 10000)
+        let fetchMessage = this.createAlert ("trying to fetch data ...", "info", "info-circle", 5000)
         fetchMessage.toast ()
         this.myServiceComponent.fetchDataFromGoogleDrive ()
             .then (remoteData => {
@@ -158,6 +161,62 @@ class Application extends HTMLElement {
                 errorMessage.toast ()
                 //console.log (`oops, something went wrong: '${e.message}'`)
             })
+        this.promoteLocalInstallation ()
+    }
+
+    /**
+     * this method handles the user defined app installation promotion
+     */
+    promoteLocalInstallation () {
+        // get a ref to the gui installButton
+        const installButton = document.getElementById ('installApp')
+
+        /**
+         * first install an event handler to "catch" the beforinstallprompt
+         * this event will only be fired, if the app is not already installed
+         */
+        window.addEventListener ('beforeinstallprompt', (e) => {
+            //  prevent the browsers default behavior
+            e.preventDefault ()
+            //  enable the installButton in the gui
+            installButton.disabled = false
+            //  and save the event to trigger it later
+            this.deferredInstallationPrompt = e
+        })
+
+        /**
+         * next we need a way to detect if the pwa was succesfully installed
+         * You can use the result.outcome property to determine if the user 
+         * installed your app from within the user interface. 
+         * But, if the user installs the PWA from the address bar or other 
+         * browser component, result.outcome won't help. 
+         * Instead, you should listen for the appinstalled event. 
+         * It is fired whenever your PWA is installed, no matter what mechanism 
+         * is used to install your PWA.
+         */
+        window.addEventListener ('appinstalled', () => {
+            // if succesfully installed disable the installButton
+            // and disgard the deferredInstallationPrompt
+            // TODO:    better remove the button completely
+            installButton.disabled = true
+            this.deferredInstallationPrompt = null
+        })
+
+        installButton.addEventListener ('click', e => {
+            if (this.deferredInstallationPrompt) {
+                this.deferredInstallationPrompt.prompt ()
+                this.deferredInstallationPrompt.userChoice.then (result => {
+                    //  here could be a place where to decide what should happen
+                    //  with the promoteInstall gui elements, but a better way is 
+                    //  to use the appinstalled event (see there). It is fired whenever 
+                    //  your PWA is installed, no matter what mechanism 
+                    //  is used to install your PWA.
+                    console.log (`user respond to install prompt: ${result.outcome}`)
+                    //  the installPrompt can only be used once, so throw it away
+                    this.deferredInstallationPrompt = null    
+                })
+            }
+        })
     }
 
     /**
@@ -204,7 +263,7 @@ class Application extends HTMLElement {
                 <small><center>made by s01042</center></small>
             `
         })
-        dialog.style = "--width: 50vw;"
+        //dialog.style = "--width: 50vw;"
         document.body.append (dialog)
         return dialog
     }

@@ -58,6 +58,8 @@ Then the decision as to whether and how often a website can use the interface de
 
 The higher the score, the more often the events can be triggered, in the best case once a day.
 
+At the time of october 2021 safari does not support periodic background sync at all. So on apple devices a chromium based browser is necessary for that.
+
 # Try it
 
 Use [this link](https://s01042.github.io/Anyplace/) to try the app.
