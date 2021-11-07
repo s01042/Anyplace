@@ -48,30 +48,7 @@ class Application extends HTMLElement {
                 //TODO  i want to force a sw update in dev env. 
                 //      comment this in in production env.
                 await reg.update ()
-
-                //TODO  we need notification permissions   
-                //TODO  safari does not support this query?
-                let syncPermission = await navigator.permissions.query ({name: 'periodic-background-sync'})
-                if ((syncPermission) && (syncPermission.state === 'granted')) {
-                    //  check if ready is supported
-                    if (navigator.serviceWorker.ready) {
-                        navigator.serviceWorker.ready.then ( async registry => {
-                            if ('PeriodicSyncManager' in window) {
-                                try {
-                                  await registry.periodicSync.register('ANYPLACE_BACKGROUND_SYNC', {
-                                    minInterval: 1 * 60 * 60 * 1000
-                                  });
-                                } catch (error) {
-                                  console.log ('Bakground sync not available')
-                                }
-                            }
-                        })
-                    }
-                } else {
-                    //let alert = this.createAlert ('Background sync is disabled.', 'warning', 'exclamation-triangle', 3000)
-                    //alert.toast ()
-                    console.log ('background sync is not available')
-                }
+                await this.registerBackgroundSync ()
                 // notify (`ServiceWorker registered. Scope is '${reg.scope}'!`, 'info', 'info-circle', 5000)
             } catch (exception) {
                 let alert = this.createAlert (`ServiceWorker registration failed: ${exception}`, 'warning', 'exclamation-triangle', 10000)
@@ -80,6 +57,45 @@ class Application extends HTMLElement {
         } else {
             let alert = this.createAlert (`your browser does not support ServiceWorker.`)
             alert.toast ()
+        }
+    }
+
+    /**
+     * https://web.dev/periodic-background-sync/
+     * https://developer.chrome.com/docs/devtools/javascript/background-services/?utm_source=devtools
+     * register the app for periodic background syncing
+     * TODO:    refactor this and put it into the service worker itself
+     */
+    async registerBackgroundSync () {
+        //TODO  safari does not support this query?
+        let syncPermission = await navigator.permissions.query ({name: 'periodic-background-sync'})
+        if ((syncPermission) && (syncPermission.state === 'granted')) {
+            //  check if ready is supported
+            if (navigator.serviceWorker.ready) {
+                navigator.serviceWorker.ready.then ( async registry => {
+
+                    if ('PeriodicSyncManager' in window) {
+                        //  check if already installed
+                        const tags = await registry.periodicSync.getTags ()
+                        if (tags.includes ('ANYPLACE_BACKGROUND_SYNC')) {
+                            // we are done here 
+                            console.log ("periodic sync 'ANYPLACE_BACKGROUND_SYNC' already installed")
+                        } else {
+                            try {
+                                await registry.periodicSync.register('ANYPLACE_BACKGROUND_SYNC', {
+                                    minInterval: 1 * 60 * 60 * 1000
+                                });
+                            } catch (error) {
+                                console.log (`Bakground sync not available ${error.message}`)
+                            }      
+                        }
+                    }
+                })
+            }
+        } else {
+            //let alert = this.createAlert ('Background sync is disabled.', 'warning', 'exclamation-triangle', 3000)
+            //alert.toast ()
+            console.log ('background sync is not available')
         }
     }
 
@@ -125,7 +141,7 @@ class Application extends HTMLElement {
     connectedCallback () {
 
         this.installResizeObserver ()
-        let fetchMessage = this.createAlert ("trying to fetch data ...", "info", "info-circle", 5000)
+        let fetchMessage = this.createAlert ("trying to fetch data ...", "info", "info-circle", 10000)
         fetchMessage.toast ()
         this.myServiceComponent.fetchDataFromGoogleDrive ()
             .then (remoteData => {
@@ -163,15 +179,19 @@ class Application extends HTMLElement {
                 //console.log (`oops, something went wrong: '${e.message}'`)
             })
         this.promoteLocalInstallation ()
+        if ((Notification) && (Notification.permission != 'granted')) {
+            Notification.requestPermission ()
+        }
     }
+
+
 
     /**
      * this method handles the user defined app installation promotion
      */
     promoteLocalInstallation () {
-        // get a ref to the gui installButton
-        let installButton = null
 
+        let installButton = null
         /**
          * first install an event handler to "catch" the beforinstallprompt
          * this event will only be fired, if the app is not already installed
@@ -195,7 +215,6 @@ class Application extends HTMLElement {
             })
             let buttonGroup = document.getElementsByTagName ('sl-button-group')
             buttonGroup.item (0).appendChild (installButton)
-
         })
 
         /**
@@ -211,8 +230,9 @@ class Application extends HTMLElement {
         window.addEventListener ('appinstalled', () => {
             // if succesfully installed disable the installButton
             // and disgard the deferredInstallationPrompt
-            // TODO:    better remove the button completely
-            installButton.disabled = true
+
+            let buttonGroup = document.getElementsByTagName ('sl-button-group')
+            buttonGroup.item (0).removeChild (installButton)
             this.deferredInstallationPrompt = null
         })
     }

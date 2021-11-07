@@ -71,19 +71,56 @@ self.addEventListener ('ready', (registration) => {
     if (registration.periodicSync) {
         console.log ('periodic sync is supported')
     } else {
-        console.log ('periodic sync is not suppoerted')
+        console.log ('periodic sync is not supported')
     }
 })
 
-self.addEventListener ('sync', (event) => {
+/**
+ * this eventhandler will listen to the PeriodicSyncManager events
+ * 
+ */
+self.addEventListener ('periodicsync', (event) => {
     if (event.tag === 'ANYPLACE_BACKGROUND_SYNC') {
         event.waitUntil (doBackgroundSync())
     }
 })
 
-function doBackgroundSync () {
+/**
+ * TODO:    implement background sync 
+ *          fetch new data
+ *          get data from local cache
+ *          compare data
+ *          act appropriately
+ */
+async function doBackgroundSync () {
     console.log ('background sync triggered')
-    
+    const msg = {
+        body: 'Es gibt neue Nachrichten vom Radler',
+        icon: './images/anyplace.png',
+        tag: 'notification',
+        actions: [{action: 'show', title: 'Anzeigen'}, {action: 'dismiss', title: 'Später'}]
+    }
+    if (Notification.permission === 'granted') {
+        self.registration.showNotification ('Anyplace', msg)
+    }
+}
+
+self.onnotificationclick = function (event) {
+    event.notification.close ()
+
+    //  check if app window is already open
+    event.waitUntil (clients.matchAll ({type: 'window'})
+        .then (function (clientList) {
+            if (clientList.length === 0) {
+                if (clients.openWindow && event.action === 'show') return clients.openWindow ('/')
+            } else {
+                for (let i = 0; i < clientList.length; i++) {
+                    let client = clientList [i]
+                    if ('focus' in client) return client.focus ()
+                }
+            }
+        })
+    )
 }
 
 /**
