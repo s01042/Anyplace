@@ -77,7 +77,9 @@
         <div class="wrapper">
             <header class="page-header">Follow my tracks</header>
             <div class="parent">
+
                 <div class="box">
+
                     <!-- 
                         this is the DOM placeholder for the timeline
                     -->
@@ -102,7 +104,7 @@
                                 <li><a href="#0" class="next">Next</a></li>
                             </ul> <!-- .cd-timeline-navigation -->
                         </div> <!-- .timeline -->
-                    
+
                         <div class="events-content">
                             <ul class="no-bullets">
                                 <!--
@@ -116,8 +118,10 @@
                     </section> <!-- end placerholder for timeline -->
                 </div>
                 <div class="box" style="position: relative; z-index: 0;">
-                    <!-- init the leaflet map controller with default lat/long data -->
-                    <leaflet-map-controller latitude='52.4137053' longitude='13.091715'></leaflet-map-controller>
+                    <div id='map-container'>
+                        <!-- init the leaflet map controller with default lat/long data -->
+                        <leaflet-map-controller latitude='52.4137053' longitude='13.091715'></leaflet-map-controller>
+                    </div>
                 </div>    
             </div>
             <footer class="page-footer">(2021) Finger&uumlbung by <a href="https://github.com/s01042/Anyplace">s01042</a>
@@ -125,7 +129,9 @@
                 <br>
                 <sl-button-group>
                     <sl-button id='openDrawer' pill>help</sl-button>
+                    <!--
                     <sl-button id='installApp' disabled=true pill>install as app</sl-button>
+                    -->
                     <sl-button id='showAbout' pill>about</sl-button>
                 </sl-button-group>
                 

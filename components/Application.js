@@ -12,6 +12,7 @@ class Application extends HTMLElement {
     myAppConfig = null
     arrayOfEntries = null
     observer = null
+    resizeObserver = null
 
     theMap = null
     theMapMarker = null
@@ -45,13 +46,13 @@ class Application extends HTMLElement {
                  */
                 let reg = await navigator.serviceWorker.register ('./anyplace-service-worker.js', {scope: './'})
                 //TODO  i want to force a sw update in dev env. 
-                //      comment this in in production
+                //      comment this in in production env.
                 await reg.update ()
 
                 //TODO  we need notification permissions   
-
+                //TODO  safari does not support this query?
                 let syncPermission = await navigator.permissions.query ({name: 'periodic-background-sync'})
-                if (syncPermission.state === 'granted') {
+                if ((syncPermission) && (syncPermission.state === 'granted')) {
                     //  check if ready is supported
                     if (navigator.serviceWorker.ready) {
                         navigator.serviceWorker.ready.then ( async registry => {
@@ -71,8 +72,6 @@ class Application extends HTMLElement {
                     //alert.toast ()
                     console.log ('background sync is not available')
                 }
-
-
                 // notify (`ServiceWorker registered. Scope is '${reg.scope}'!`, 'info', 'info-circle', 5000)
             } catch (exception) {
                 let alert = this.createAlert (`ServiceWorker registration failed: ${exception}`, 'warning', 'exclamation-triangle', 10000)
@@ -124,6 +123,8 @@ class Application extends HTMLElement {
      * and will be called when the component is inserted into the DOM of the hosting page
      */
     connectedCallback () {
+
+        this.installResizeObserver ()
         let fetchMessage = this.createAlert ("trying to fetch data ...", "info", "info-circle", 5000)
         fetchMessage.toast ()
         this.myServiceComponent.fetchDataFromGoogleDrive ()
@@ -169,7 +170,7 @@ class Application extends HTMLElement {
      */
     promoteLocalInstallation () {
         // get a ref to the gui installButton
-        const installButton = document.getElementById ('installApp')
+        let installButton = null
 
         /**
          * first install an event handler to "catch" the beforinstallprompt
@@ -178,10 +179,23 @@ class Application extends HTMLElement {
         window.addEventListener ('beforeinstallprompt', (e) => {
             //  prevent the browsers default behavior
             e.preventDefault ()
-            //  enable the installButton in the gui
-            installButton.disabled = false
             //  and save the event to trigger it later
             this.deferredInstallationPrompt = e
+            if (installButton) return
+            //  insert an installButton in the gui
+            installButton = Object.assign (document.createElement ('sl-button'), {
+                id: 'installApp',
+                pill: true,
+                innerHTML: `install as app`
+            })
+            installButton.addEventListener ('click', e => {
+                if (this.deferredInstallationPrompt) {
+                    this.deferredInstallationPrompt.prompt ()
+                }
+            })
+            let buttonGroup = document.getElementsByTagName ('sl-button-group')
+            buttonGroup.item (0).appendChild (installButton)
+
         })
 
         /**
@@ -200,22 +214,6 @@ class Application extends HTMLElement {
             // TODO:    better remove the button completely
             installButton.disabled = true
             this.deferredInstallationPrompt = null
-        })
-
-        installButton.addEventListener ('click', e => {
-            if (this.deferredInstallationPrompt) {
-                this.deferredInstallationPrompt.prompt ()
-                this.deferredInstallationPrompt.userChoice.then (result => {
-                    //  here could be a place where to decide what should happen
-                    //  with the promoteInstall gui elements, but a better way is 
-                    //  to use the appinstalled event (see there). It is fired whenever 
-                    //  your PWA is installed, no matter what mechanism 
-                    //  is used to install your PWA.
-                    console.log (`user respond to install prompt: ${result.outcome}`)
-                    //  the installPrompt can only be used once, so throw it away
-                    this.deferredInstallationPrompt = null    
-                })
-            }
         })
     }
 
@@ -309,6 +307,29 @@ class Application extends HTMLElement {
         if (this.observer) {
             this.observer.disconnect ()
         }
+        if (this.resizeObserver) {
+            this.resizeObserver.disconnect ()
+        }
+    }
+
+    /**
+     * I need to detect the flex wrap event to apply a marginTop on the
+     * map view and align it properly. But there is no way to detect this 
+     * wrapping in CSS. Installing a ResizeObserver and observe the parents widths
+     * will do the job.
+     */
+    installResizeObserver () {
+        let target = document.querySelector ('.parent')
+        this.resizeObserver = new ResizeObserver (entries => {
+            for (let entry of entries) {
+                if (entry.contentRect.width > 1420) {
+                    document.getElementById ('map-container').style.marginTop = "250px"
+                } else {
+                    document.getElementById ('map-container').style.marginTop = "5px"
+                }
+            }
+        })
+        this.resizeObserver.observe (target)
     }
 
     /**
