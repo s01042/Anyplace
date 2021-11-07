@@ -271,7 +271,7 @@ class Application extends HTMLElement {
             innerHTML: `
                 <sl-button slot="footer" type="primary">Okay</sl-button>
                 <sl-avatar
-                    image="./../images/anyplace.png"
+                    image="https://s01042.github.io/Anyplace/images/anyplace.png"
                     alt="anyplace logo"
                 ></sl-avatar>
                 <strong>&nbspAnyplace</strong><br><br>
