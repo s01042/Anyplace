@@ -36,15 +36,17 @@ https://gis.stackexchange.com/questions/299914/adjust-leaflet-routing-machine-dr
 
 # TODO
 
-Fix the CORS problem!
+~~Fix the CORS problem!~~
 
-I'am still trapped by the CORS problem. I'm hosting Anyplace on GitHub pages where you can only deploy static web sites. There are no server side technologies available on GitHub pages on which I could have build my own CORS Proxy or some kind of web service proxy.
+~~I'am still trapped by the CORS problem. I'm hosting Anyplace on GitHub pages where you can only deploy static web sites. There are no server side technologies available on GitHub pages on which I could have build my own CORS Proxy or some kind of web service proxy.~~
 
-So GitHub pages is the origin of my web app. The JavaScript code of my app is running locally on the client device and in the client browser. That leads to the fact, that fetching the data from my Google Drive is a cross origin call always controlled by CORS. 
+~~So GitHub pages is the origin of my web app. The JavaScript code of my app is running locally on the client device and in the client browser. That leads to the fact, that fetching the data from my Google Drive is a cross origin call always controlled by CORS. ~~
+
+See next section.
 
 # Resumption
 
-Another CORS proxy server was abused and is down now. So i implemented my own service proxy and host it on heroku. With this came new ideas: periodic background syncing and notifications came to my mind. 
+Another CORS proxy server was abused and is down now. So finally I implemented my own service proxy and host it on [heroku](https://www.heroku.com). With this came new ideas: periodic background syncing, notifications and badging came to my mind. 
 
 # About periodic background sync
 

@@ -26,6 +26,7 @@ class Application extends HTMLElement {
         this.registerServiceWorker ()
         this.wireupTheDrawer ()
         this.wireupAboutDialog ()
+        this.wireupReloadButton ()
     }
 
     /**
@@ -83,7 +84,7 @@ class Application extends HTMLElement {
                         } else {
                             try {
                                 await registry.periodicSync.register('ANYPLACE_BACKGROUND_SYNC', {
-                                    minInterval: 1 * 60 * 60 * 1000
+                                    minInterval: 24 * 60 * 60 * 1000    // one in 24 hrs.
                                 });
                             } catch (error) {
                                 console.log (`Bakground sync not available ${error.message}`)
@@ -97,6 +98,20 @@ class Application extends HTMLElement {
             //alert.toast ()
             console.log ('background sync is not available')
         }
+    }
+
+    /**
+     * TODO:    this button should only be shown if NOT in browser mode.
+     *          in browser mode there is the standard way to reload the page.
+     *          on apple devices in standalone mode there is no swipe down gesture
+     *          to reload the page, so the button can be helpful.  
+     */
+    wireupReloadButton () {
+        const reloadButton = document.getElementById ('reloadPage')
+        reloadButton.addEventListener ('click', e => {
+            reloadButton.blur ()
+            location.reload ()
+        })
     }
 
     /**
@@ -179,6 +194,10 @@ class Application extends HTMLElement {
                 //console.log (`oops, something went wrong: '${e.message}'`)
             })
         this.promoteLocalInstallation ()
+        /**
+         * TODO: this is bad style. it is a kind of hard login and should be changed 
+         * in a way the user can choose to allow notifications to a later time
+         */
         if ((Notification) && (Notification.permission != 'granted')) {
             Notification.requestPermission ()
         }
@@ -205,6 +224,7 @@ class Application extends HTMLElement {
             //  insert an installButton in the gui
             installButton = Object.assign (document.createElement ('sl-button'), {
                 id: 'installApp',
+                size: 'large',
                 pill: true,
                 innerHTML: `install as app`
             })
@@ -212,6 +232,7 @@ class Application extends HTMLElement {
                 if (this.deferredInstallationPrompt) {
                     this.deferredInstallationPrompt.prompt ()
                 }
+                installButton.blur ()   // remove the focus anyway
             })
             let buttonGroup = document.getElementsByTagName ('sl-button-group')
             buttonGroup.item (0).appendChild (installButton)
