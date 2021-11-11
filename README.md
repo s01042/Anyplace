@@ -40,7 +40,7 @@ https://gis.stackexchange.com/questions/299914/adjust-leaflet-routing-machine-dr
 
 ~~I'am still trapped by the CORS problem. I'm hosting Anyplace on GitHub pages where you can only deploy static web sites. There are no server side technologies available on GitHub pages on which I could have build my own CORS Proxy or some kind of web service proxy.~~
 
-~~So GitHub pages is the origin of my web app. The JavaScript code of my app is running locally on the client device and in the client browser. That leads to the fact, that fetching the data from my Google Drive is a cross origin call always controlled by CORS. ~~
+~~So GitHub pages is the origin of my web app. The JavaScript code of my app is running locally on the client device and in the client browser. That leads to the fact, that fetching the data from my Google Drive is a cross origin call always controlled by CORS.~~
 
 See next section.
 
@@ -58,7 +58,7 @@ In chromium browsers the permission for 'periodic-bakground-sync' is only grante
 
 Then the decision as to whether and how often a website can use the interface depends on its site engagement score. This is between 0 and 100 points, is influenced by the use of the website and can be viewed under chrome: // site-engagement.
 
-The higher the score, the more often the events can be triggered, in the best case once a day.
+The higher the score, the more often the events can be triggered, **in the best case once a day**.
 
 At the time of october 2021 safari does not support periodic background sync at all. So on apple devices a chromium based browser is necessary for that.
 

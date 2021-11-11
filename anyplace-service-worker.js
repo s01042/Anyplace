@@ -112,7 +112,7 @@ self.onnotificationclick = function (event) {
     event.waitUntil (clients.matchAll ({type: 'window'})
         .then (function (clientList) {
             if (clientList.length === 0) {
-                if (clients.openWindow && event.action === 'show') return clients.openWindow ('./Anyplace')
+                if (clients.openWindow && event.action === 'show') return clients.openWindow ('./')
             } else {
                 for (let i = 0; i < clientList.length; i++) {
                     let client = clientList [i]
