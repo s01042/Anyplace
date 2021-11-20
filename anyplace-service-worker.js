@@ -8,7 +8,7 @@
     chrome://inspect/#service-workers
     chrome://serviceworker-internals/
 */
-
+const DOCUMENT_END_POINT = 'https://infinite-castle-19858.herokuapp.com/api/getGoogleDoc?docID=1hvpoA2NNjfe8PELZNxWR7mJnNMQ4Sn49'
 const cacheName = 'Anyplace-V1'
 
 /**
@@ -67,6 +67,8 @@ self.addEventListener ('install', async (e) => {
     return self.skipWaiting ()
 })
 
+self.addEventListener ('activate', e => e.waitUntil (self.clients.claim ()))
+
 self.addEventListener ('ready', (registration) => {
     if (registration.periodicSync) {
         console.log ('periodic sync is supported')
@@ -86,14 +88,41 @@ self.addEventListener ('periodicsync', (event) => {
 })
 
 /**
- * TODO:    implement background sync 
- *          fetch new data
+ * TODO:    fetch new data
  *          get data from local cache
  *          compare data
  *          act appropriately
  */
 async function doBackgroundSync () {
-    console.log ('background sync triggered')
+    let liveData = null
+    let cachedData = null
+    //  open cache
+    const cache = await caches.open (cacheName)
+    //  get cached data first
+    const cachedReponse = await cache.match (DOCUMENT_END_POINT)
+    if (cachedReponse.ok) {
+        const cachedJson = await cachedReponse.json ()
+        cachedData = cachedJson.value
+    }
+    //  get the live data
+    const liveResponse = await fetch (DOCUMENT_END_POINT, {credentials: 'same-origin'})
+    //  and update the cache with the new liveData
+    await cache.put (DOCUMENT_END_POINT, liveResponse.clone())  
+
+    if (liveResponse.ok) {
+        const liveJson = await liveResponse.json ()
+        liveData = liveJson.value
+    }
+    //  now check if notification is required
+    if (liveData && cachedData) {
+        if (liveData.length === cachedData.length) {
+            console.log (`there are new data`)
+            showNotification ()
+        }
+    }
+}
+
+function showNotification () {
     const msg = {
         body: 'Es gibt neue Nachrichten vom Radler',
         icon: './images/anyplace.png',
@@ -112,7 +141,13 @@ self.onnotificationclick = function (event) {
     event.waitUntil (clients.matchAll ({type: 'window'})
         .then (function (clientList) {
             if (clientList.length === 0) {
-                if (clients.openWindow && event.action === 'show') return clients.openWindow ('./')
+                //TODO  openWindow requires permission to show popups
+                //      ask for permission if necessary
+                if (clients.openWindow && event.action === 'show') {
+                    clients.openWindow ('./').then (windowClient => {
+                        return windowClient.focus ()
+                    })
+                }
             } else {
                 for (let i = 0; i < clientList.length; i++) {
                     let client = clientList [i]

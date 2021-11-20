@@ -48,7 +48,7 @@ class Application extends HTMLElement {
                 let reg = await navigator.serviceWorker.register ('./anyplace-service-worker.js', {scope: './'})
                 //TODO  i want to force a sw update in dev env. 
                 //      comment this in in production env.
-                await reg.update ()
+                //await reg.update ()
                 await this.registerBackgroundSync ()
                 // notify (`ServiceWorker registered. Scope is '${reg.scope}'!`, 'info', 'info-circle', 5000)
             } catch (exception) {
@@ -199,7 +199,8 @@ class Application extends HTMLElement {
          * in a way the user can choose to allow notifications to a later time
          */
         if ((Notification) && (Notification.permission != 'granted')) {
-            Notification.requestPermission ()
+            Notification.requestPermission ().then (result => {console.log (result)})
+
         }
     }
 
@@ -226,7 +227,9 @@ class Application extends HTMLElement {
                 id: 'installApp',
                 size: 'large',
                 pill: true,
-                innerHTML: `install as app`
+                innerHTML: `
+                    <sl-icon slot="suffix" name="download"></sl-icon>
+                    install as app`
             })
             installButton.addEventListener ('click', e => {
                 if (this.deferredInstallationPrompt) {
