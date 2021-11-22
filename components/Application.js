@@ -194,17 +194,66 @@ class Application extends HTMLElement {
                 //console.log (`oops, something went wrong: '${e.message}'`)
             })
         this.promoteLocalInstallation ()
+        
         /**
-         * TODO: this is bad style. it is a kind of hard login and should be changed 
-         * in a way the user can choose to allow notifications to a later time
+         * install an event handler to detect and handle changes of notificationPermission
          */
-        if ((Notification) && (Notification.permission != 'granted')) {
-            Notification.requestPermission ().then (result => {console.log (result)})
-
+        if ('permissions' in navigator) {
+            let that = this
+            navigator.permissions.query ({name: 'notifications'}).then (notificationPermission => {
+                notificationPermission.onchange = function () {
+                    that.handleNotification ()
+                }
+            })
         }
+        /**
+         * and handle it initialy
+         */
+        this.handleNotification ()
     }
 
-
+    /**
+     *  Browsers save your decision for the particular domain and 
+     *  will NOT ask for your permission again. For them to ask again 
+     *  you would have to make them forget your last decision (eg reset ). 
+     *  that's why it only appropriate to enable the button when the 
+     *  permission state is "prompt" or "default" (which is prompt or ask). 
+     *  Otherwise disable the button and indicate the actual state by an icon 
+     */
+    handleNotification () {
+        let button = document.getElementById ('notification')
+        if ((Notification) && ((Notification.permission === 'prompt') || (Notification.permission === 'default'))) {
+            button.disabled = false
+            button.innerHTML = `
+                <sl-icon slot='suffix' name='question-diamond'></sl-icon>
+                notification
+            `
+            button.addEventListener ('click', e => {
+                const that = this
+                Notification.requestPermission ().then (function (result) {
+                    button.blur ()
+                    that.handleNotification ()
+                })
+            })
+        } 
+        else if ((Notification) && (Notification.permission === 'granted')) {
+            button.disabled = true
+            button.innerHTML = `
+                <sl-icon slot='suffix' name='bell-fill'></sl-icon>
+                enabled
+            `
+        }
+        else if ((Notification) && (Notification.permission === 'denied')) {
+            button.disabled = true
+            button.innerHTML = `
+                <sl-icon slot='suffix' name='bell'></sl-icon>
+                disabled
+            `
+        }
+        else {
+            button.disabled = true
+        }
+    }
 
     /**
      * this method handles the user defined app installation promotion
@@ -302,7 +351,7 @@ class Application extends HTMLElement {
                 Folge mir mit dieser App auf meiner Radreise durch Europa.<br><br>
                 Ich werde in regeläßigen Abständen meine Orts-, Wetter- und Zustandsdaten aktualisieren. So kannst du wissen, wo ich bin und wie es mir geht. &#128692;
                 <br><br><br>
-                <small><center>made by s01042</center></small>
+                <small><center>by s01042</center></small>
             `
         })
         //dialog.style = "--width: 50vw;"
