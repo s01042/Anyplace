@@ -194,7 +194,12 @@ class Application extends HTMLElement {
                 //console.log (`oops, something went wrong: '${e.message}'`)
             })
         this.promoteLocalInstallation ()
-        
+        //  if app is started remove the badge
+        if (navigator.clearAppBadge) {
+            navigator.clearAppBadge ().catch (error => {
+                console.log (`clear badge failed: ${error}`)
+            })
+        }
         //  handle the notificationPermission state initialy
         this.handleNotificationPermission ()
         //  and install an event handler to monitor further changes of state
