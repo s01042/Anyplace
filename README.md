@@ -56,11 +56,21 @@ The service worker can fetch new data at a regular intervall and compares this n
 
 In chromium browsers the permission for 'periodic-bakground-sync' is only granted, if the website is locally installed as an pwa. Since Chrome regards the installation of the application as implicit consent, there will be no permission request shown to the end user. 
 
-Then the decision as to whether and how often a website can use the interface depends on its site engagement score. This is between 0 and 100 points, is influenced by the use of the website and can be viewed under chrome: // site-engagement.
+Then the decision as to whether and how often a website can use the interface depends on its **site engagement score**. This is between 0 and 100 points, is influenced by the use of the website and can be viewed under chrome: // site-engagement.
 
 The higher the score, the more often the events can be triggered, **in the best case once a day**.
 
-At the time of october 2021 safari does not support periodic background sync at all. So on apple devices a chromium based browser is necessary for that.
+At the time of october 2021 Apples safari browser does not support periodic background sync at all. So **on apple devices a chromium based browser is necessary for that**.
+
+# The control and runtime environment of a PWA
+
+First and foremost a PWA is like a Website with special features. Some of these special features will only come in affect, if the website is **installed locally** (eg. periodic background sync). The instance of control and management of a PWA is the browser with which the Website was initially viewed and originally installed. 
+
+Unfortunately, not every browsers supports all PWA functions equally. Apple Safari browsers for example do not support periodic background sync on Mac OS and iOS. One can of course install a chromium based browser (eg. google chrome) on such devices, visit the web site and then install as app under the control and runtime environment of this browser and participate from this extended features. 
+
+So developers again have to detect feature support by the different runtime environments and need to keep an eye on that to be prepared for fallback scenarios.
+
+I will use "Badging" as a alternative to the notification api to inform the user about new data entries. Badging is widely supported on all platforms and browsers.
 
 # Try it
 

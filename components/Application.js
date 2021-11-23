@@ -195,58 +195,58 @@ class Application extends HTMLElement {
             })
         this.promoteLocalInstallation ()
         
-        /**
-         * install an event handler to detect and handle changes of notificationPermission
-         */
-        if ('permissions' in navigator) {
+        //  handle the notificationPermission state initialy
+        this.handleNotificationPermission ()
+        //  and install an event handler to monitor further changes of state
+        if (navigator.permissions) {
             let that = this
             navigator.permissions.query ({name: 'notifications'}).then (notificationPermission => {
                 notificationPermission.onchange = function () {
-                    that.handleNotification ()
+                    //console.log ('handle notification.onchange event')
+                    that.handleNotificationPermission ()
                 }
-            })
+            })        
         }
-        /**
-         * and handle it initialy
-         */
-        this.handleNotification ()
     }
 
     /**
-     *  Browsers save your decision for the particular domain and 
+     *  At firt run notificationPermission will be default (prompt or ask).
+     *  We than will enable the button to request notificationPermission at users will.
+     *  Browsers save this decision for the particular domain and 
      *  will NOT ask for your permission again. For them to ask again 
      *  you would have to make them forget your last decision (eg reset ). 
-     *  that's why it only appropriate to enable the button when the 
-     *  permission state is "prompt" or "default" (which is prompt or ask). 
-     *  Otherwise disable the button and indicate the actual state by an icon 
+     *  that's why it's only appropriate to enable the button when the 
+     *  permission state is "prompt" or "default". 
+     *  Otherwise disable the button and indicate the actual state by an icon.
+     *  But the user can change the granted authorization later via browser settings
+     *  or system settings on android. We can install an event handler to monitor this
+     *  changes and indicate the actual permission.  
      */
-    handleNotification () {
+    handleNotificationPermission () {
         let button = document.getElementById ('notification')
         if ((Notification) && ((Notification.permission === 'prompt') || (Notification.permission === 'default'))) {
             button.disabled = false
             button.innerHTML = `
-                <sl-icon slot='suffix' name='question-diamond'></sl-icon>
+                <sl-icon slot='suffix' name='question-diamond' style="font-size: 1.5rem"></sl-icon>
                 notification
             `
             button.addEventListener ('click', e => {
-                const that = this
-                Notification.requestPermission ().then (function (result) {
+                Notification.requestPermission ().then (result => {
                     button.blur ()
-                    that.handleNotification ()
-                })
+                }) 
             })
         } 
         else if ((Notification) && (Notification.permission === 'granted')) {
             button.disabled = true
             button.innerHTML = `
-                <sl-icon slot='suffix' name='bell-fill'></sl-icon>
+                <sl-icon slot='suffix' name='bell-fill' style="font-size: 1.5rem"></sl-icon>
                 enabled
             `
         }
         else if ((Notification) && (Notification.permission === 'denied')) {
             button.disabled = true
             button.innerHTML = `
-                <sl-icon slot='suffix' name='bell'></sl-icon>
+                <sl-icon slot='suffix' name='bell' style="font-size: 1.5rem"></sl-icon>
                 disabled
             `
         }
@@ -277,7 +277,7 @@ class Application extends HTMLElement {
                 size: 'large',
                 pill: true,
                 innerHTML: `
-                    <sl-icon slot="suffix" name="download"></sl-icon>
+                    <sl-icon slot="suffix" name="download" style="font-size: 1.5rem"></sl-icon>
                     install as app`
             })
             installButton.addEventListener ('click', e => {

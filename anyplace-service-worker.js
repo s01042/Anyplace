@@ -116,21 +116,34 @@ async function doBackgroundSync () {
     //  now check if notification is required
     if (liveData && cachedData) {
         if (liveData.length === cachedData.length) {
-            console.log (`there are new data`)
-            showNotification ()
+            //TODO: this is for testing purposes only
+            //      later i will use liveData.length - cachedData.length here
+            showNotification (2)
         }
     }
 }
 
-function showNotification () {
+/**
+ * 
+ * @param {int} numberOfNewEntries 
+ */
+function showNotification (numberOfNewEntries) {
     const msg = {
-        body: 'Es gibt neue Nachrichten vom Radler',
+        body: `Es gibt ${numberOfNewEntries} neue Nachricht(en) vom Radler`,
         icon: './images/anyplace.png',
         tag: 'notification',
         actions: [{action: 'show', title: 'Anzeigen'}, {action: 'dismiss', title: 'Später'}]
     }
     if (Notification.permission === 'granted') {
         self.registration.showNotification ('Anyplace', msg)
+    } else {
+        if (navigator.setAppBadge) {
+            navigator.setAppBadge (numberOfNewEntries).catch (error => {
+                console.log (`error setAppBadge: ${error}`)
+            }).then ( returnValue => {
+                console.log (`setAppBadge: ${returnValue}`)
+            })
+        }
     }
 }
 

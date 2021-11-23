@@ -64,11 +64,12 @@
                 <div class="block">
                     <h2>Einige Hinweise:</h2>
                     <p>Die Zeitleisten- und Kartenkomponente sind touch-aware. Wenn dein Gerät über einen Touchscreen verfügt, kannst du diese Komponenten darüber bedienen.</p>
-                    <p>Die Anordung der GUI-Elemente ist responsive und passt sich dynamisch der Bildschirmgröße an.</p>
-                    <p>Das aktuelle Layout ist auf einem iPad Air, zwei verschiedenen Mobilfunktelefonen und zwei Notebooks getestet worden. Der grundsätzliche Entwurf folgt dem 'mobile first' Ansatz.</p>
                     <p>Durch die Zeitleiste kann man auch mit der linke und rechten Cursortaste navigieren.</p>
                     <p>In der Kartenansicht kann man durch Swipen navigieren und mit den üblichen Gesten zoomen.</p>
                     <p>Die Kartenmarkierung ist anklickbar und zeigt die ungefähre Luftlinienentfernung zwischen dem markierten Standort und meiner 'home base'.</p>
+                    <p>Wenn du diese Web-Site als App auf deinem Gerät installierst, kann sie im Hintergrung eine periodische Datensynchronisation durchführen. Das funktioniert auch dann, wenn die App selbst gerade gar nicht auf deinem Gerät ausgeführt wird.</p>
+                    <p>Wenn neue Daten vorliegen, kann dich die App darüber durch Benachrichtigungen informieren. Um das zu ermöglichen, musst du die Berechtigung zur Benachrichtigung explizit erteilen.</p>
+                    <p>Die Schalfläche mit dem Symbol der Glocke zeigt dir deine aktuelle Benachrichtigungseinstellung an.</p>
                 </div>
                 <sl-button slot="footer" type="info">Close</sl-button>
             </sl-drawer>            
@@ -129,18 +130,18 @@
                 <br>
                 <sl-button-group>
                     <sl-button id='openDrawer' size='large' pill>
-                        <sl-icon slot="suffix" name="question-circle"></sl-icon>
+                        <sl-icon slot="suffix" name="question-circle" style="font-size: 1.5rem"></sl-icon>
                         help
                     </sl-button>
                     <sl-button id='reloadPage' size='large' pill>
-                        <sl-icon slot="suffix" name="arrow-clockwise"></sl-icon>
+                        <sl-icon slot="suffix" name="arrow-clockwise" style="font-size: 1.5rem"></sl-icon>
                         reload
                     </sl-button>
                     <sl-button id='notification' size='large' pill>
-                        <sl-icon slot='suffix' name='bell-fill'></sl-icon>
+                        <sl-icon slot='suffix' name='bell-fill' style="font-size: 1.5rem"></sl-icon>
                     </sl-button>
                     <sl-button id='showAbout' size='large' pill>
-                        <sl-icon slot="suffix" name="info-circle"></sl-icon>
+                        <sl-icon slot="suffix" name="info-circle" style="font-size: 1.5rem"></sl-icon>
                         about
                     </sl-button>
                 </sl-button-group>

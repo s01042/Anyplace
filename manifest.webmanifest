@@ -8,6 +8,9 @@
     "theme_color": "#93908D",
     "description": "Follow my tracks",
     "scope": "./",
+    "permissions": [
+        "notifications"
+    ],
     "icons": [
         {
             "src": "./images/anyplace512.png",
