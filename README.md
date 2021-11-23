@@ -48,7 +48,7 @@ See next section.
 
 Another CORS proxy server was abused and is down now. So finally I implemented my own service proxy and host it on [heroku](https://www.heroku.com). With this came new ideas: periodic background syncing, notifications and badging came to my mind. 
 
-# About periodic background sync
+# <a name="apbs"></a>About periodic background sync
 
 Periodic background sync is an extension of the background sync API. the goal is to regular force synchronisation events and update the locally (offline) stored data with fresh online data. the background sync API does not show any information in the apps gui. instead it delegates all the duty to the service worker.
 
