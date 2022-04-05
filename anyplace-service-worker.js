@@ -106,19 +106,20 @@ async function doBackgroundSync () {
     }
     //  get the live data
     const liveResponse = await fetch (DOCUMENT_END_POINT, {credentials: 'same-origin'})
-    //  and update the cache with the new liveData
-    await cache.put (DOCUMENT_END_POINT, liveResponse.clone())  
-
+ 
     if (liveResponse.ok) {
+        //  update the cache with the new liveData
+        await cache.put (DOCUMENT_END_POINT, liveResponse.clone())  
+
         const liveJson = await liveResponse.json ()
         liveData = liveJson.value
     }
     //  now check if notification is required
+    //  if we have more live data than chached data
+    //  we have new data and should notify the user about
     if (liveData && cachedData) {
-        if (liveData.length === cachedData.length) {
-            //TODO: this is for testing purposes only
-            //      later i will use liveData.length - cachedData.length here
-            showNotification (2)
+        if (liveData.length > cachedData.length) {
+            showNotification (liveData.length - cachedData.length)
         }
     }
 }

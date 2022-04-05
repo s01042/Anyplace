@@ -345,7 +345,7 @@ class Application extends HTMLElement {
      */
     createAboutDialog () {
         const dialog = Object.assign (document.createElement ('sl-dialog'), {
-            label: 'About this app',
+            label: 'Über diese App',
             innerHTML: `
                 <sl-button slot="footer" type="primary">Okay</sl-button>
                 <sl-avatar
