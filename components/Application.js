@@ -68,8 +68,11 @@ class Application extends HTMLElement {
      * TODO:    refactor this and put it into the service worker itself
      */
     async registerBackgroundSync () {
-        //TODO  safari does not support this query?
-        let syncPermission = await navigator.permissions.query ({name: 'periodic-background-sync'})
+        let syncPermission = null
+        //safari does not support this query in 2022!
+        if (navigator.permissions && navigator.permissions.query) {
+            syncPermission = await navigator.permissions.query ({name: 'periodic-background-sync'})
+        }
         if ((syncPermission) && (syncPermission.state === 'granted')) {
             //  check if ready is supported
             if (navigator.serviceWorker.ready) {
@@ -262,6 +265,8 @@ class Application extends HTMLElement {
 
     /**
      * this method handles the user defined app installation promotion
+     * this again is not supported on iOS/Safari devices. there you need to 
+     * use the "share button" | "add to home-screen" action
      */
     promoteLocalInstallation () {
 
