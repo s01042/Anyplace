@@ -60,7 +60,11 @@ Then the decision as to whether and how often a website can use the interface de
 
 The higher the score, the more often the events can be triggered, **in the best case once a day**.
 
-At the time of october 2021 Apples safari browser does not support periodic background sync at all. So **on apple devices a chromium based browser is necessary for that**.
+Here is an example screenshot of the notification about new data arrival, fetched by background sync.
+
+![notification of new data](./images/Anyplace_Notification.png)
+
+At the time of october 2021 Apples safari browser does not support periodic background sync at all. 
 
 # The control and runtime environment of a PWA
 
